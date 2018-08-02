@@ -60,3 +60,119 @@ function columnas(pos){
 $(function(){
   tituloParpadeo(".main-titulo");
 });
+//Emparejamiento de caramelos Columnas
+function validacionColumnas(){
+  for(var ii=0;ii<7;ii++){
+    var contador = 0;
+    var posicion = [];
+    var posicion2 = [];
+    var columna = columnas(ii);
+    var comparacion = columna.eq(0);
+    var x = false;
+    for(var i=1;i<columna.length;i++){
+      var imgComparacion = comparacion.attr("src");
+      var caramelo = columna.eq(i).attr("src");
+      if(imgComparacion != caramelo){
+        if(posicion.length >= 3){
+          x = true;
+        }else{
+          posicion = [];
+        }
+        contador = 0;
+      }else{
+        if(contador == 0){
+          if(!x){
+            posicion.push(i-1);
+          }else{
+            posicion2.push(i-1);
+          }
+        }
+        if(!x){
+          posicion.push(i);
+        }else{
+          posicion2.push(i);
+        }
+        contador +=1;
+      }
+      comparacion = columna.eq(1);
+    }
+    if(posicion2.length > 2){
+      posicion = $.merge(posicion,posicion2);
+    }
+    if(posicion.length <=2){
+      posicion=[];
+    }
+    puntajeConteo = posicion.lenght;
+    if(puntajeConteo >=3){
+      combinarColumna(posicion,columna);
+      marcador(puntajeConteo);
+    }
+  }
+}
+function combinarColumna(posicion,columna){
+  for(var i=0;i<posicion.length;i++){
+    columna.eq(posicion[i].addClass("delete"));
+  }
+}
+//Emparejamiento de caramelos Filas
+function validacionFilas(){
+  for (var i=0;i<6;i++){
+    var contador = 0;
+    var posicion = [];
+    var posicion2 = [];
+    var fila = filas(i);
+    var comparacion = fila[0];
+    var x = false;
+    for(var ii = 1; ii<fila.lenght;ii++){
+      var imgComparacion = comparacion.attr("src");
+      var caramelo = fila[i].attr("src");
+
+      if(imgComparacion != caramelo){
+        if(posicion.length>=3){
+          x=true;
+        }else{
+          posicion=[];
+        }
+        contador=0;
+      }else{
+        if(contador == 0){
+          if(!x){
+            posicion.push(i-1);
+          }else{
+            posicion2.push(i-1);
+          }
+        }
+        if(!x){
+          posicion.push(i);
+        }else{
+          posicion2.push(i);
+        }
+        contador +=1;
+      }
+      comparacion = fila[i];
+    }
+    if(posicion2.length>2){
+      posicion = $.merge(posicion,posicion2);
+    }
+    if(posicion.length<=2){
+      posicion=[];
+    }
+    puntajeConteo = posicion.length;
+    if(puntajeConteo >=3){
+      borrarFilas(posicion,fila);
+      marcador(puntajeConteo);
+    }
+  }
+}
+function borrarFilas(posicion,fila){
+  for(var i=0;i<posicion.length;i++){
+    fila[posicion[i]].addClass("delete");
+  }
+}
+function validaciones(){
+  validacionColumnas();
+  validacionFilas();
+  //if($("img.delete").length !== 0){
+    //eliminarCaramelos();
+  //}
+}
