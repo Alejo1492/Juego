@@ -57,9 +57,6 @@ function columnas(pos){
   var columna = obtenerPosicion("columna");
   return columna[pos];
 }
-$(function(){
-  tituloParpadeo(".main-titulo");
-});
 //Emparejamiento de caramelos Columnas
 function validacionColumnas(){
   for(var ii=0;ii<7;ii++){
@@ -192,6 +189,9 @@ function marcador(valores){
 }
 
 //Impresion de caramelos en pantalla
+function llenado(){
+  llenarTablero();
+}
 function llenarTablero(){
   var num = 6;
   var columnas = $("[class^='col-']");
@@ -201,9 +201,9 @@ function llenarTablero(){
     for(i=0;i<agregar;i++){
       var tipoCaramelo = numerosAleatorios(1,5);
       if(i === 0 && caramelos<1){
-        $(this).append('<img src="image/'+tipoCaramelo+'.png" class="element"></img>';
+        $(this).append('<img src="image/' + tipoCaramelo + '.png" class="element"></img>');
       }else{
-        $(this).find('img:eq(0)').before('<img src="image/'+tipoCaramelo+'.png" class="element"></img>');
+        $(this).find('img:eq(0)').before('<img src="image/'+tipoCaramelo + '.png" class="element"></img>');
       }
     }
   });
@@ -217,3 +217,9 @@ function validaciones(){
     eliminarCaramelos();
   }
 }
+//interacciones
+
+//
+$(function(){
+  tituloParpadeo(".main-titulo");
+});
