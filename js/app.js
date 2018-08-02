@@ -169,6 +169,27 @@ function borrarFilas(posicion,fila){
     fila[posicion[i]].addClass("delete");
   }
 }
+//Puntuacion de las combinaciones
+function marcador(valores){
+  var puntaje = Number($("#score-text").text());
+  switch (valores) {
+    case 3:
+      puntaje +=30;
+      break;
+      case 4:
+      puntaje +=60;
+      break;
+      case 5:
+      puntaje +=80;
+      break;
+      case 6:
+      puntaje +=110;
+      break;
+      case 7:
+      puntaje +=150;
+  }
+  $("#score-text").text(puntaje);
+}
 function validaciones(){
   validacionColumnas();
   validacionFilas();
