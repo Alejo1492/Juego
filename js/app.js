@@ -190,10 +190,30 @@ function marcador(valores){
   }
   $("#score-text").text(puntaje);
 }
+
+//Impresion de caramelos en pantalla
+function llenarTablero(){
+  var num = 6;
+  var columnas = $("[class^='col-']");
+  columnas.each(function(){
+    var caramelos = $(this).children().length;
+    var agregar=num-caramelos;
+    for(i=0;i<agregar;i++){
+      var tipoCaramelo = numerosAleatorios(1,5);
+      if(i === 0 && caramelos<1){
+        $(this).append('<img src="image/'+tipoCaramelo+'.png" class="element"></img>';
+      }else{
+        $(this).find('img:eq(0)').before('<img src="image/'+tipoCaramelo+'.png" class="element"></img>');
+      }
+    }
+  });
+  interacciones();
+  validaciones();
+}
 function validaciones(){
   validacionColumnas();
   validacionFilas();
-  //if($("img.delete").length !== 0){
-    //eliminarCaramelos();
-  //}
+  if($("img.delete").length !== 0){
+    eliminarCaramelos();
+  }
 }
