@@ -217,9 +217,59 @@ function validaciones(){
     eliminarCaramelos();
   }
 }
-//interacciones
-
-//
+//Eventos de movimientos
+function eventosCaramelos(){
+  $("img").draggable(
+    { zIndex: 10,
+      containment:".panel-tablero",
+      droppable:"img",
+      revert: true,
+      revertDuration: 600,
+      drag:movimientosCaramelos,
+      grid:[100,100]
+    });
+    $("img").droppable(
+      {drop:intercambio}
+    );
+    habilitarEventos();
+}
+function habilitarEventos(){
+  $("img").draggable("enable");
+  $("img").droppable("enable");
+}
+function deshabilitarEventos(){
+  $("img").draggable("disable");
+  $("img").droppable("disable");
+}
+function movimientosCaramelos(event,carameloCaptura){
+  carameloCaptura.position.top = Math.min(100, carameloCaptura.position.top);
+  carameloCaptura.position.bottom = Math.min(100, carameloCaptura.position.bottom);
+  carameloCaptura.position.left = Math.min(100, carameloCaptura.position.left);
+  carameloCaptura.position.right = Math.min(100, carameloCaptura.position.right);
+}
+function intercambio(event, carameloCaptura){
+  var carameloCaptura = $(carameloCaptura.draggable);
+  var tipoCaptura = carameloCaptura.attr("src");
+  var carameloSoltar = $(this);
+  var tipoSoltar = carameloSoltar.attr("src");
+  carameloCaptura.attr("src",tipoCaptura);
+  carameloSoltar.attr("src",tipoSoltar);
+  setTimeout(function (){
+    llenado();
+    if($("img.delete").length === 0){
+      carameloCaptura.attr("src",tipoCaptura);
+      carameloSoltar.attr("src",tipoSoltar);
+    }else{
+      cargarAcciones();
+    }
+  },600);
+}
+function validarLlenado(validador){
+  if(validador){
+    llenado();
+  }
+}
+//Cargue del DOM
 $(function(){
   tituloParpadeo(".main-titulo");
 });
