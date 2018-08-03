@@ -301,7 +301,24 @@ function borrarCaramelo(){
     }
   });
 }
+function finJuego(){
+  $('div.panel-tablero, div.time').effect('fold');
+	$('h1.main-titulo').addClass('title-over')
+		.text('Gracias por jugar!');
+	$('div.score, div.moves, div.panel-score').width('100%');
+}
 //Cargue del DOM
 $(function(){
   tituloParpadeo(".main-titulo");
+
+  $('.btn-reinicio').click(function () {
+		if ($(this).text() === 'Reiniciar') {
+			location.reload(true);
+		}
+		checkBoard();
+		$(this).text('Reiniciar');
+		$('#timer').startTimer({
+			onComplete: finJuego
+		})
+	});
 });
