@@ -1,6 +1,6 @@
-//Fucncion para el cambio de color del titulo
-function tituloParpadeo(elemento){
-  blanco(elemento);
+//punto 1. cambia el color del titulo y alterna
+function colorBlink(elemento) {
+	blanco(elemento);
   function blanco(elemento){
     $(elemento).animate(
       {opacity:"1"},
@@ -18,309 +18,363 @@ function tituloParpadeo(elemento){
         blanco(elemento);
       });}
 }
-//Numeros aleatorios
-function numerosAleatorios(numero1,numero2){
-  numero1 = Math.ceil(numero1);
-  numero2 = Math.floor(numero2);
-  return Math.floor(Math.random()*(numero2 - numero1))+numero1;
-}
-//Filas y columnas del tablero
-function obtenerPosicion(tipo, pos){
-  var col1 = $(".col-1").children();
-  var col2 = $(".col-2").children();
-  var col3 = $(".col-3").children();
-  var col4 = $(".col-4").children();
-  var col5 = $(".col-5").children();
-  var col6 = $(".col-6").children();
-  var col7 = $(".col-7").children();
 
-  var columnas = $([col1,col2,col3,col4,col5,col6,col7]);
-  if(typeof pos === "number"){
-    var filas = $([col1.eq(pos),col2.eq(pos),col3.eq(pos),col4.eq(pos),col5.eq(pos),col6.eq(pos),col7.eq(pos)]);
-  }else{
-    pos= "";
-  }
-  if(tipo === "columna"){
-    return columnas;
-  }else if(tipo === "fila" && pos !== ""){
-    return filas;
-  }
-}
-//filas
-function filas(pos){
-  var fila = obtenerPosicion("fila",pos);
-  return fila;
-}
-//columnas
-function columnas(pos){
-  var columna = obtenerPosicion("columna");
-  return columna[pos];
-}
-//Emparejamiento de caramelos Columnas
-function validacionColumnas(){
-  for(var ii=0;ii<7;ii++){
-    var contador = 0;
-    var posicion = [];
-    var posicion2 = [];
-    var columna = columnas(ii);
-    var comparacion = columna.eq(0);
-    var x = false;
-    for(var i=1;i<columna.length;i++){
-      var imgComparacion = comparacion.attr("src");
-      var caramelo = columna.eq(i).attr("src");
-      if(imgComparacion != caramelo){
-        if(posicion.length >= 3){
-          x = true;
-        }else{
-          posicion = [];
-        }
-        contador = 0;
-      }else{
-        if(contador == 0){
-          if(!x){
-            posicion.push(i-1);
-          }else{
-            posicion2.push(i-1);
-          }
-        }
-        if(!x){
-          posicion.push(i);
-        }else{
-          posicion2.push(i);
-        }
-        contador +=1;
-      }
-      comparacion = columna.eq(1);
-    }
-    if(posicion2.length > 2){
-      posicion = $.merge(posicion,posicion2);
-    }
-    if(posicion.length <=2){
-      posicion=[];
-    }
-    puntajeConteo = posicion.lenght;
-    if(puntajeConteo >=3){
-      combinarColumna(posicion,columna);
-      marcador(puntajeConteo);
-    }
-  }
-}
-function combinarColumna(posicion,columna){
-  for(var i=0;i<posicion.length;i++){
-    columna.eq(posicion[i].addClass("delete"));
-  }
-}
-//Emparejamiento de caramelos Filas
-function validacionFilas(){
-  for (var i=0;i<6;i++){
-    var contador = 0;
-    var posicion = [];
-    var posicion2 = [];
-    var fila = filas(i);
-    var comparacion = fila[0];
-    var x = false;
-    for(var ii = 1; ii<fila.lenght;ii++){
-      var imgComparacion = comparacion.attr("src");
-      var caramelo = fila[i].attr("src");
-
-      if(imgComparacion != caramelo){
-        if(posicion.length>=3){
-          x=true;
-        }else{
-          posicion=[];
-        }
-        contador=0;
-      }else{
-        if(contador == 0){
-          if(!x){
-            posicion.push(i-1);
-          }else{
-            posicion2.push(i-1);
-          }
-        }
-        if(!x){
-          posicion.push(i);
-        }else{
-          posicion2.push(i);
-        }
-        contador +=1;
-      }
-      comparacion = fila[i];
-    }
-    if(posicion2.length>2){
-      posicion = $.merge(posicion,posicion2);
-    }
-    if(posicion.length<=2){
-      posicion=[];
-    }
-    puntajeConteo = posicion.length;
-    if(puntajeConteo >=3){
-      borrarFilas(posicion,fila);
-      marcador(puntajeConteo);
-    }
-  }
-}
-function borrarFilas(posicion,fila){
-  for(var i=0;i<posicion.length;i++){
-    fila[posicion[i]].addClass("delete");
-  }
-}
-//Puntuacion de las combinaciones
-function marcador(valores){
-  var puntaje = Number($("#score-text").text());
-  switch (valores) {
-    case 3:
-      puntaje +=30;
-      break;
-      case 4:
-      puntaje +=60;
-      break;
-      case 5:
-      puntaje +=80;
-      break;
-      case 6:
-      puntaje +=110;
-      break;
-      case 7:
-      puntaje +=150;
-  }
-  $("#score-text").text(puntaje);
+//punto 2. funcion para generar números aleatorios
+function getRandomInt(min, max) {
+	min = Math.ceil(min);
+	max = Math.floor(max);
+	return Math.floor(Math.random() * (max - min)) + min;
 }
 
-//Impresion de caramelos en pantalla
-function llenado(){
-  llenarTablero();
+// obtiene filas de dulces o columas
+function giveCandyArrays(arrayType, index) {
+
+	var candyCol1 = $('.col-1').children();
+	var candyCol2 = $('.col-2').children();
+	var candyCol3 = $('.col-3').children();
+	var candyCol4 = $('.col-4').children();
+	var candyCol5 = $('.col-5').children();
+	var candyCol6 = $('.col-6').children();
+	var candyCol7 = $('.col-7').children();
+
+	var candyColumns = $([candyCol1, candyCol2, candyCol3, candyCol4,
+		candyCol5, candyCol6, candyCol7
+	]);
+
+	if (typeof index === 'number') {
+		var candyRow = $([candyCol1.eq(index), candyCol2.eq(index), candyCol3.eq(index),
+			candyCol4.eq(index), candyCol5.eq(index), candyCol6.eq(index),
+			candyCol7.eq(index)
+		]);
+	} else {
+		index = '';
+	}
+
+	if (arrayType === 'columns') {
+		return candyColumns;
+	} else if (arrayType === 'rows' && index !== '') {
+		return candyRow;
+	}
 }
-function llenarTablero(){
-  var num = 6;
-  var columnas = $("[class^='col-']");
-  columnas.each(function(){
-    var caramelos = $(this).children().length;
-    var agregar=num-caramelos;
-    for(i=0;i<agregar;i++){
-      var tipoCaramelo = numerosAleatorios(1,5);
-      if(i === 0 && caramelos<1){
-        $(this).append('<img src="image/' + tipoCaramelo + '.png" class="element"></img>');
-      }else{
-        $(this).find('img:eq(0)').before('<img src="image/'+tipoCaramelo + '.png" class="element"></img>');
-      }
-    }
-  });
-  eventosCaramelos();
-  validaciones();
+
+// arreglos de filas
+function candyRows(index) {
+	var candyRow = giveCandyArrays('rows', index);
+	return candyRow;
 }
-function validaciones(){
-  validacionColumnas();
-  validacionFilas();
-  if($("img.delete").length !== 0){
-    eliminarCaramelos();
-  }
+
+// arreglos de colunmnas
+function candyColumns(index) {
+	var candyColumn = giveCandyArrays('columns');
+	return candyColumn[index];
 }
-//Eventos de movimientos
-function eventosCaramelos(){
-  $("img").draggable(
-    { zIndex: 10,
-      containment:".panel-tablero",
-      droppable:"img",
-      revert: true,
-      revertDuration: 600,
-      drag:movimientosCaramelos,
-      grid:[100,100]
-    });
-    $("img").droppable(
-      {drop:intercambio}
-    );
-    habilitarEventos();
+
+//punto 3. Valida si hay dulces que se eliminarán en una columna
+function columnValidation() {
+	for (var j = 0; j < 7; j++) {
+		var counter = 0;
+		var candyPosition = [];
+		var extraCandyPosition = [];
+		var candyColumn = candyColumns(j);
+		var comparisonValue = candyColumn.eq(0);
+		var gap = false;
+		for (var i = 1; i < candyColumn.length; i++) {
+			var srcComparison = comparisonValue.attr('src');
+			var srcCandy = candyColumn.eq(i).attr('src');
+
+			if (srcComparison != srcCandy) {
+				if (candyPosition.length >= 3) {
+					gap = true;
+				} else {
+					candyPosition = [];
+				}
+				counter = 0;
+			} else {
+				if (counter == 0) {
+					if (!gap) {
+						candyPosition.push(i - 1);
+					} else {
+						extraCandyPosition.push(i - 1);
+					}
+				}
+				if (!gap) {
+					candyPosition.push(i);
+				} else {
+					extraCandyPosition.push(i);
+				}
+				counter += 1;
+			}
+			comparisonValue = candyColumn.eq(i);
+		}
+		if (extraCandyPosition.length > 2) {
+			candyPosition = $.merge(candyPosition, extraCandyPosition);
+		}
+		if (candyPosition.length <= 2) {
+			candyPosition = [];
+		}
+		candyCount = candyPosition.length;
+		if (candyCount >= 3) {
+			deleteColumnCandy(candyPosition, candyColumn);
+			setScore(candyCount);
+		}
+	}
 }
-function habilitarEventos(){
-  $("img").draggable("enable");
-  $("img").droppable("enable");
+function deleteColumnCandy(candyPosition, candyColumn) {
+	for (var i = 0; i < candyPosition.length; i++) {
+		candyColumn.eq(candyPosition[i]).addClass('delete');
+	}
 }
-function deshabilitarEventos(){
-  $("img").draggable("disable");
-  $("img").droppable("disable");
+
+// Valida si hay dulces que deben eliminarse en una fila
+function rowValidation() {
+	for (var j = 0; j < 6; j++) {
+		var counter = 0;
+		var candyPosition = [];
+		var extraCandyPosition = [];
+		var candyRow = candyRows(j);
+		var comparisonValue = candyRow[0];
+		var gap = false;
+		for (var i = 1; i < candyRow.length; i++) {
+			var srcComparison = comparisonValue.attr('src');
+			var srcCandy = candyRow[i].attr('src');
+
+			if (srcComparison != srcCandy) {
+				if (candyPosition.length >= 3) {
+					gap = true;
+				} else {
+					candyPosition = [];
+				}
+				counter = 0;
+			} else {
+				if (counter == 0) {
+					if (!gap) {
+						candyPosition.push(i - 1);
+					} else {
+						extraCandyPosition.push(i - 1);
+					}
+				}
+				if (!gap) {
+					candyPosition.push(i);
+				} else {
+					extraCandyPosition.push(i);
+				}
+				counter += 1;
+			}
+			comparisonValue = candyRow[i];
+		}
+		if (extraCandyPosition.length > 2) {
+			candyPosition = $.merge(candyPosition, extraCandyPosition);
+		}
+		if (candyPosition.length <= 2) {
+			candyPosition = [];
+		}
+		candyCount = candyPosition.length;
+		if (candyCount >= 3) {
+			deleteHorizontal(candyPosition, candyRow);
+			setScore(candyCount);
+		}
+	}
 }
-function movimientosCaramelos(event,carameloCaptura){
-  carameloCaptura.position.top = Math.min(100, carameloCaptura.position.top);
-  carameloCaptura.position.bottom = Math.min(100, carameloCaptura.position.bottom);
-  carameloCaptura.position.left = Math.min(100, carameloCaptura.position.left);
-  carameloCaptura.position.right = Math.min(100, carameloCaptura.position.right);
+function deleteHorizontal(candyPosition, candyRow) {
+	for (var i = 0; i < candyPosition.length; i++) {
+		candyRow[candyPosition[i]].addClass('delete');
+	}
 }
-function intercambio(event, carameloCaptura){
-  var carameloCaptura = $(carameloCaptura.draggable);
-  var tipoCaptura = carameloCaptura.attr("src");
-  var carameloSoltar = $(this);
-  var tipoSoltar = carameloSoltar.attr("src");
-  carameloCaptura.attr("src",tipoCaptura);
-  carameloSoltar.attr("src",tipoSoltar);
-  setTimeout(function (){
-    llenado();
-    if($("img.delete").length === 0){
-      carameloCaptura.attr("src",tipoCaptura);
-      carameloSoltar.attr("src",tipoSoltar);
-    }else{
-      cargarAcciones();
-    }
-  },600);
+
+//contador de puntuacion muestra la puntuacion
+function setScore(candyCount) {
+	var score = Number($('#score-text').text());
+	switch (candyCount) {
+		case 3:
+			score += 25;
+			break;
+		case 4:
+			score += 50;
+			break;
+		case 5:
+			score += 75;
+			break;
+		case 6:
+			score += 100;
+			break;
+		case 7:
+			score += 200;
+	}
+	$('#score-text').text(score);
 }
-function validarLlenado(validador){
-  if(validador){
-    llenado();
-  }
+
+//pone los elemento caramelo en el tablero
+function checkBoard() {
+	fillBoard();
 }
-//Tablero de puntucaiones
-function cargarAcciones(){
-  var momentoX = Number($("#movimientos-text").text());
-  var resultado = momentoX += 1;
-  $("#movimientos-text").text(result);
+
+function fillBoard() {
+	var top = 6;
+	var column = $('[class^="col-"]');
+
+	column.each(function () {
+		var candys = $(this).children().length;
+		var agrega = top - candys;
+		for (var i = 0; i < agrega; i++) {
+			var candyType = getRandomInt(1, 5);
+			if (i === 0 && candys < 1) {
+				$(this).append('<img src="image/' + candyType + '.png" class="element"></img>');
+			} else {
+				$(this).find('img:eq(0)').before('<img src="image/' + candyType + '.png" class="element"></img>');
+			}
+		}
+	});
+	addCandyEvents();
+	setValidations();
 }
-//ellimincion de elementos del Tablero
-function eliminacionTablero(){
-  deshabilitarEventos();
-  $("img.delete").effect("pulsate",400);
-  $("img.delete").animate(
-    {opacity: "0"},
-  {duration:300})
-  .animate(
-    {opacity:"0"},
-  {duration: 400,
-  complete: function(){
-    borrarCaramelo().then(validarLlenado).catch(validarError);
-  },queue:true});
+
+// Si hay dulces que borrar
+function setValidations() {
+	columnValidation();
+	rowValidation();
+	// Si hay dulces que borrar
+	if ($('img.delete').length !== 0) {
+		deletesCandyAnimation();
+	}
 }
-function validarError(error){
-  console.log(error);
+
+
+//punto 7. interacción del usuario con el elemento caramelo es drag and drop
+//efecto de movimiento entre los caramelos
+function addCandyEvents() {
+	$('img').draggable({
+		containment: '.panel-tablero',
+		droppable: 'img',
+		revert: true,
+		revertDuration: 500,
+		grid: [100, 100],
+		zIndex: 10,
+		drag: constrainCandyMovement
+	});
+	$('img').droppable({
+		drop: swapCandy
+	});
+	enableCandyEvents();
 }
-function borrarCaramelo(){
-  return new Promise(function(resolve,reject){
-    if($("img.delete").remove()){
-      resolve(true);
-    }else{
-      reject("Caramelo no eliminado");
-    }
-  });
+
+function disableCandyEvents() {
+	$('img').draggable('disable');
+	$('img').droppable('disable');
 }
-function finJuego(){
-  $('div.panel-tablero, div.time').effect('fold');
+
+function enableCandyEvents() {
+	$('img').draggable('enable');
+	$('img').droppable('enable');
+}
+
+//hace que el caramelo sea solido al moverse
+function constrainCandyMovement(event, candyDrag) {
+	candyDrag.position.top = Math.min(100, candyDrag.position.top);
+	candyDrag.position.bottom = Math.min(100, candyDrag.position.bottom);
+	candyDrag.position.left = Math.min(100, candyDrag.position.left);
+	candyDrag.position.right = Math.min(100, candyDrag.position.right);
+}
+
+//reemplaza a los caramelos anteriores
+function swapCandy(event, candyDrag) {
+	var candyDrag = $(candyDrag.draggable);
+	var dragSrc = candyDrag.attr('src');
+	var candyDrop = $(this);
+	var dropSrc = candyDrop.attr('src');
+	candyDrag.attr('src', dropSrc);
+	candyDrop.attr('src', dragSrc);
+
+	setTimeout(function () {
+		checkBoard();
+		if ($('img.delete').length === 0) {
+			candyDrag.attr('src', dragSrc);
+			candyDrop.attr('src', dropSrc);
+		} else {
+			updateMoves();
+		}
+	}, 500);
+
+}
+
+function checkBoardPromise(result) {
+	if (result) {
+		checkBoard();
+	}
+}
+
+//valida la puntuacion por cantidad de elementos en linea
+function updateMoves() {
+	var actualValue = Number($('#movimientos-text').text());
+	var result = actualValue += 1;
+	$('#movimientos-text').text(result);
+}
+
+//eliminacion automatica de los elementos
+function deletesCandyAnimation() {
+	disableCandyEvents();
+	$('img.delete').effect('pulsate', 400);
+	$('img.delete').animate({
+			opacity: '0'
+		}, {
+			duration: 300
+		})
+		.animate({
+			opacity: '0'
+		}, {
+			duration: 400,
+			complete: function () {
+				deletesCandy()
+					.then(checkBoardPromise)
+					.catch(showPromiseError);
+			},
+			queue: true
+		});
+}
+
+//llenado automatico de los espacios con elementos
+function showPromiseError(error) {
+	console.log(error);
+}
+
+function deletesCandy() {
+	return new Promise(function (resolve, reject) {
+		if ($('img.delete').remove()) {
+			resolve(true);
+		} else {
+			reject('No se pudo eliminar Caramelo');
+		}
+	})
+}
+
+//punto 4 y 6. temporizador y boton reiniciar
+//cambia el aspecto de la página
+//final del juego
+function endGame() {
+	$('div.panel-tablero, div.time').effect('fold');
 	$('h1.main-titulo').addClass('title-over')
 		.text('Gracias por jugar!');
 	$('div.score, div.moves, div.panel-score').width('100%');
-}
-//Cargue del DOM
-function init(){
-  tituloParpadeo(".main-titulo");
 
-  $('.btn-reinicio').click(function () {
+}
+
+// inicia el juego
+function initGame() {
+
+	colorBlink('h1.main-titulo');
+
+	$('.btn-reinicio').click(function () {
 		if ($(this).text() === 'Reiniciar') {
 			location.reload(true);
 		}
-    llenado();
+		checkBoard();
 		$(this).text('Reiniciar');
 		$('#timer').startTimer({
-			onComplete: finJuego
+			onComplete: endGame
 		})
 	});
 }
-$(function(){
-  init();
+
+// Prepara el juego
+$(function() {
+	initGame();
 });
