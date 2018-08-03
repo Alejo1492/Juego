@@ -36,10 +36,9 @@ function obtenerPosicion(tipo, pos){
 
   var columnas = $([col1,col2,col3,col4,col5,col6,col7]);
   if(typeof pos === "number"){
-    var filas = $([col1.eq(pos),col2.eq(pos),col3.eq(pos),col4.eq(pos),
-      col5.eq(pos),col6.eq(pos),col7.eq(pos)]);
+    var filas = $([col1.eq(pos),col2.eq(pos),col3.eq(pos),col4.eq(pos),col5.eq(pos),col6.eq(pos),col7.eq(pos)]);
   }else{
-    pos="";
+    pos= "";
   }
   if(tipo === "columna"){
     return columnas;
@@ -207,7 +206,7 @@ function llenarTablero(){
       }
     }
   });
-  interacciones();
+  eventosCaramelos();
   validaciones();
 }
 function validaciones(){
@@ -308,17 +307,20 @@ function finJuego(){
 	$('div.score, div.moves, div.panel-score').width('100%');
 }
 //Cargue del DOM
-$(function(){
+function init(){
   tituloParpadeo(".main-titulo");
 
   $('.btn-reinicio').click(function () {
 		if ($(this).text() === 'Reiniciar') {
 			location.reload(true);
 		}
-		checkBoard();
+    llenado();
 		$(this).text('Reiniciar');
 		$('#timer').startTimer({
 			onComplete: finJuego
 		})
 	});
+}
+$(function(){
+  init();
 });
