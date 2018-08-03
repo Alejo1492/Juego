@@ -269,6 +269,38 @@ function validarLlenado(validador){
     llenado();
   }
 }
+//Tablero de puntucaiones
+function cargarAcciones(){
+  var momentoX = Number($("#movimientos-text").text());
+  var resultado = momentoX += 1;
+  $("#movimientos-text").text(result);
+}
+//ellimincion de elementos del Tablero
+function eliminacionTablero(){
+  deshabilitarEventos();
+  $("img.delete").effect("pulsate",400);
+  $("img.delete").animate(
+    {opacity: "0"},
+  {duration:300})
+  .animate(
+    {opacity:"0"},
+  {duration: 400,
+  complete: function(){
+    borrarCaramelo().then(validarLlenado).catch(validarError);
+  },queue:true});
+}
+function validarError(error){
+  console.log(error);
+}
+function borrarCaramelo(){
+  return new Promise(function(resolve,reject){
+    if($("img.delete").remove()){
+      resolve(true);
+    }else{
+      reject("Caramelo no eliminado");
+    }
+  });
+}
 //Cargue del DOM
 $(function(){
   tituloParpadeo(".main-titulo");
